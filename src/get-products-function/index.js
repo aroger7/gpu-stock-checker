@@ -75,7 +75,7 @@ const getProducts = async () => {
 
   const cluster = await Cluster.launch({
     concurrency: Cluster.CONCURRENCY_CONTEXT,
-    maxConcurrency: 2,
+    maxConcurrency: 1,
     puppeteer,
     puppeteerOptions: {
       args: [
@@ -92,12 +92,17 @@ const getProducts = async () => {
     }
   });
 
+  const attempt = 1;
   await cluster.task(async ({ page, data }) => {
     const { vendor, task } = data;
+    console.log(`attempt ${attempt}`);
     await task({ page });
+    attempt++;
   });
 
-  cluster.queue({ vendor: 'newegg', task: vendors.newegg.getVideoCards });
+  Array.from(Array(100)).forEach(() => {
+    cluster.queue({ vendor: 'newegg', task: vendors.newegg.getVideoCards });
+  });
 
   await cluster.idle();
   await cluster.close();

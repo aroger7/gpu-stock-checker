@@ -24,7 +24,7 @@ const getVideoCards = async (opts) => {
         title: titleLink.textContent,
         link: titleLink.href
       }), titleLink);
-      console.log(`${title} - ${link}`);
+      // console.log(`${title} - ${link}`);
     };
 
     if (nextBtn) {
