@@ -12,7 +12,7 @@ const getVideoCards = async (opts) => {
   
   console.log('Newegg:');
   for (let i = 0; i < totalPages; i++) {
-    const recaptcha = await page.$('#g-recaptcha');
+    const recaptcha = await page.$('div.g-recaptcha');
     if (recaptcha) {
       console.log('looks like we hit a recaptcha');
     }

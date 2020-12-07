@@ -92,16 +92,14 @@ const getProducts = async () => {
     }
   });
 
-  const attempt = 1;
   await cluster.task(async ({ page, data }) => {
-    const { vendor, task } = data;
+    const { vendor, task, attempt } = data;
     console.log(`attempt ${attempt}`);
     await task({ page });
-    attempt++;
   });
 
-  Array.from(Array(100)).forEach(() => {
-    cluster.queue({ vendor: 'newegg', task: vendors.newegg.getVideoCards });
+  Array.from(Array(100)).forEach((_, attempt) => {
+    cluster.queue({ vendor: 'newegg', task: vendors.newegg.getVideoCards, attempt: attempt + 1 });
   });
 
   await cluster.idle();
