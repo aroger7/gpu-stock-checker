@@ -75,7 +75,21 @@ const getProducts = async () => {
 
   const cluster = await Cluster.launch({
     concurrency: Cluster.CONCURRENCY_CONTEXT,
-    maxConcurrency: 2
+    maxConcurrency: 2,
+    puppeteer,
+    puppeteerOptions: {
+      args: [
+        '--no-sandbox',
+        '--disable-setuid-sandbox',
+        '--disable-dev-shm-usage',
+        '--disable-accelerated-2d-canvas',
+        '--no-first-run',
+        '--no-zygote',
+        // '--single-process', // <- this one doesn't works in Windows
+        '--disable-gpu'
+      ],
+      headless: true
+    }
   });
 
   await cluster.task(async ({ page, data }) => {
