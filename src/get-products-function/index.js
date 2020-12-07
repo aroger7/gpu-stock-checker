@@ -92,22 +92,14 @@ const getProducts = async () => {
     }
   });
 
-  await cluster.task(async({ page, data: url }) => {
-    await page.goto(url);
-    await page.screenshot({ path: '/home/aroger7/bot.png', fullPage: true });
-  })
-
-  cluster.queue('https://arh.antoinevastel.com/bots/areyouheadless');
-
-  // await cluster.task(async ({ page, data }) => {
-  //   const { vendor, task, attempt } = data;
+  await cluster.task(async ({ page, data }) => {
+    const { vendor, task } = data;
     
-  //   console.log(`attempt ${attempt}`);
-  //   await task({ page });
-  // });
+    await task({ page });
+  });
 
   // Array.from(Array(100)).forEach((_, attempt) => {
-  //   cluster.queue({ vendor: 'newegg', task: vendors.newegg.getVideoCards, attempt: attempt + 1 });
+    cluster.queue({ vendor: 'newegg', task: vendors.newegg.getVideoCards });
   // });
 
   await cluster.idle();
