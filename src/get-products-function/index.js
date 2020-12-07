@@ -1,16 +1,13 @@
 
 const  { Cluster } = require('puppeteer-cluster');
-const chromium = require('chrome-aws-lambda')
 const { addExtra } = require('puppeteer-extra');
 const StealthPlugin = require('puppeteer-extra-plugin-stealth');
 const { performance } = require('perf_hooks');
-const fetch = require('node-fetch');
 const axios = require('axios');
-const cheerio = require('cheerio');
 
 const vendors = require('../vendorApis');
 
-const puppeteer = addExtra(chromium.puppeteer);
+const puppeteer = addExtra(require('puppeteer'));
 puppeteer.use(StealthPlugin());
 
 const productPageLinks = [
@@ -77,23 +74,8 @@ const getProducts = async () => {
   const t0 = performance.now();
 
   const cluster = await Cluster.launch({
-    concurrency: Cluster.CONCURRENCY_PAGE,
-    maxConcurrency: 2,
-    puppeteer,
-    puppeteerOptions: {
-      executablePath: await chromium.executablePath,
-      args: [
-        ...chromium.args.filter(arg => arg !== '--disable-notifications'),
-        '--disable-web-security',
-        '--disable-dev-profile',
-        '--font-render-hinting=medium', // could be 'none', 'medium'
-        '--enable-font-antialiasing'
-      ],
-      defaultViewport: chromium.defaultViewport,
-      // headless: chromium.headless,
-      headless: true,
-      userDataDir: '/dev/null'
-    }
+    concurrency: Cluster.CONCURRENCY_CONTEXT,
+    maxConcurrency: 2
   });
 
   await cluster.task(async ({ page, data }) => {
