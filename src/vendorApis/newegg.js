@@ -4,6 +4,7 @@ const VIDEO_CARD_PAGE_URL = 'https://www.newegg.ca/p/pl?N=100007708%204814%20601
 const getVideoCards = async (opts) => {
   const { page } = opts;
   await page.goto(VIDEO_CARD_PAGE_URL);
+  await page.screenshot({ path: '~/blah.png' });
   // console.log(await page.evaluate(() => document.body.innerHTML));
   const paginationEls = await page.$$('.list-tool-pagination');
   const bottomPagination = paginationEls && paginationEls[1];
