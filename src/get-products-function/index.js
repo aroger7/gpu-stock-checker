@@ -115,6 +115,8 @@ const getProducts = async () => {
   // console.log(res);
 };
 
-exports.handler = async (event, context) => {
-  return await getProducts();
-}
+getProducts();
+
+// exports.handler = async (event, context) => {
+//   return await getProducts();
+// }
